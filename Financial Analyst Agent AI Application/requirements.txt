@@ -8,3 +8,7 @@ uvicorn
 groq
 openai
 python-multipart
+sqlalchemy
+pgvector
+psycopg[binary]
+pypdf
