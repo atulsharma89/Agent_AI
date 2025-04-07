@@ -29,6 +29,8 @@ os.environ["PHI_API_KEY"]=os.getenv("PHI_API_KEY")
 
 #independnt autonomus AI that should be able to assist for different dii tasks
 
+#Also, I used docker to spin up a pgvector-enabled Postgres container:
+
 #docker run -d \
 #  -e POSTGRES_DB=ai \
 #  -e POSTGRES_USER=ai \
@@ -46,6 +48,7 @@ db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
 
 
 #create knowledgebase with all the pdf we gave
+#This ingests the PDF and stores its semantic content into the pgvector collection called recipes.
 
 knowledge_base=PDFUrlKnowledgeBase(
     urls=["https://phi-public.s3.amazonaws.com/recipes/ThaiRecipes.pdf"],
@@ -57,8 +60,33 @@ knowledge_base=PDFUrlKnowledgeBase(
 knowledge_base.load()
 
 # Create storage
+#Assistant Storage Layer
+#This sets up persistent storage for assistant sessions using Postgres.
+
+#Maintains Chat History Across Sessions
+
+#Without persistent storage, every time the assistant restarts, it “forgets” past interactions.
+#Persistent storage allows the assistant to recall previous conversations, making responses smarter and more personalized over time.
+#2️⃣ Supports Long-Running Interactions
+
+#Many workflows require multi-step interactions (e.g., summarizing a document, refining a search, or tracking a task).
+#With stored session states, the assistant can pick up where it left off without starting from scratch.
+#3️⃣ Enables Multi-User Support
+
+#If you're building for more than one user, storing sessions in Postgres allows you to track each user's session separately.
+#You can store metadata like user_id, run_id, and timestamps, making analytics and user experience better.
+#4️⃣ Auditing and Debugging
+
+#Keeping logs of past conversations helps in auditing decisions, tracking model performance, and improving user experience.
+#It also makes it easier to debug issues or improve prompts based on real usage data.
+5️⃣# Scales with Application
+
+#Using Postgres (with SQLAlchemy or similar ORMs) ensures that your application can scale reliably with proper data integrity, backup, and migration support.
+
 
 storage=PgAssistantStorage(table_name="pdf_assistant",db_url=db_url)
+
+#Assistant Logic
 
 def pdf_assistant(new: bool = False, user: str = "user"):
     run_id: Optional[str] = None
