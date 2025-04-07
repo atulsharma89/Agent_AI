@@ -1,0 +1,7 @@
+Requirement already satisfied: SQLAlchemy[asyncio] in /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages (2.0.22)
+Requirement already satisfied: typing-extensions>=4.2.0 in /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages (from SQLAlchemy[asyncio]) (4.12.2)
+Collecting greenlet!=0.4.17 (from SQLAlchemy[asyncio])
+  Using cached greenlet-3.1.1-cp312-cp312-macosx_11_0_universal2.whl.metadata (3.8 kB)
+Using cached greenlet-3.1.1-cp312-cp312-macosx_11_0_universal2.whl (274 kB)
+Installing collected packages: greenlet
+Successfully installed greenlet-3.1.1
